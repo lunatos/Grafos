@@ -122,6 +122,7 @@ pair<vector<int>, vector<int>> readGraph(const string &filename)
 
 void classifyEdges(const vector<int> &pointer, const vector<int> &arc_dest, int Vx)
 {
+    auto start = chrono::high_resolution_clock::now();
     stack<int> pilha;
     // pointer.size() - 2 é o numero de vertices, pois não estamos utilizando a pos 0, então temos q alocar numero de vertices mais um
     // TD = tempo de descoberta, TT = tempo de termino
@@ -181,7 +182,6 @@ void classifyEdges(const vector<int> &pointer, const vector<int> &arc_dest, int 
                     }
                 }
             }
-
             if (!achou)
             {
                 // não foi encontrada nenhuma aresta de arvore então chegou o tempo de termino do vertice do topo da pilha
@@ -190,6 +190,69 @@ void classifyEdges(const vector<int> &pointer, const vector<int> &arc_dest, int 
                 pilha.pop();
             }
         }
+    }
+    auto stop = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+    auto seconds = duration.count() / 1000;
+    auto minutes = seconds / 60;
+    seconds %= 60;
+    auto milliseconds = duration.count() % 1000;
+
+    cout << "Classificacao das arestas feitas em: " << minutes << " minutos, " << seconds << " segundos e " << milliseconds << " milissegundos" << endl;
+
+    // irei colocar na mesma função a escrita no arquivo do resultado das classificações das arestas
+    ofstream outputFile("tree_edges.txt");
+    if (outputFile)
+    {
+        outputFile << "Arestas de arvore: " << endl;
+        for (int i = 1; i < pointer.size() - 1; i++)
+        {
+            for (int j = pointer[i]; j < pointer[i + 1]; j++)
+            {
+                if (edgeClassification[j] == TREE_EDGE)
+                {
+                    outputFile << i << " -> " << arc_dest[j] << endl;
+                }
+            }
+        }
+        outputFile.close();
+        cout << "Classificacao das arestas escrita no arquivo: tree_edges.txt" << endl;
+    }
+    else
+    {
+        cerr << "Error: nao foi possivel escrever no arquivo tree_edges.txt" << endl;
+    }
+
+    // irei colocar na mesma função a escrita no arquivo do resultado das classificações das arestas que saem do verticeX
+    ofstream outputFileX("vertex_edges_classification.txt");
+    if (outputFileX)
+    {
+        outputFileX << "Classificacao das arestas que saem do vertice " << Vx << endl;
+        for (int i = pointer[Vx]; i < pointer[Vx + 1]; i++)
+        {
+            outputFileX << Vx << " -> " << arc_dest[i];
+            switch (edgeClassification[i])
+            {
+            case TREE_EDGE:
+                outputFileX << " Aresta de árvore" << endl;
+                break;
+            case BACK_EDGE:
+                outputFileX << " Aresta de retorno" << endl;
+                break;
+            case FORWARD_EDGE:
+                outputFileX << " Aresta de avanço" << endl;
+                break;
+            case CROSS_EDGE:
+                outputFileX << " Aresta de cruzamento" << endl;
+                break;
+            }
+        }
+        outputFileX.close();
+        cout << "Classificacao das arestas que saem do vertice X escrita no arquivo: vertex_edges_classification.txt" << endl;
+    }
+    else
+    {
+        cerr << "Error: nao foi possivel escrever no arquivo vertex_edges_classification.txt" << endl;
     }
 }
 
@@ -202,7 +265,7 @@ int main()
     vector<int> arc_dest = std::move(result.second);
 
     int Vx;
-    cout << "Digite um dos vertices desse grafo: ";
+    cout << "Digite um dos vertices desse grafo para ser o vertice X: ";
     while (true)
     {
         cin >> Vx;
