@@ -1,7 +1,9 @@
-Classificacao das arestas que saem do vertice 1
-1 -> 10 Aresta de árvore
-1 -> 22 Aresta de avanço
-1 -> 2 Aresta de avanço
-1 -> 3 Aresta de avanço
-1 -> 94 Aresta de avanço
-1 -> 43 Aresta de avanço
+Classificacao das arestas que saem do vertice 2
+2 -> 99 Aresta de árvore
+2 -> 30 Aresta de avanço
+2 -> 88 Aresta de avanço
+2 -> 8 Aresta de retorno
+2 -> 10 Aresta de retorno
+2 -> 48 Aresta de retorno
+2 -> 97 Aresta de avanço
+2 -> 57 Aresta de retorno
