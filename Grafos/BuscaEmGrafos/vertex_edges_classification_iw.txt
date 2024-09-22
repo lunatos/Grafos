@@ -1,0 +1,13 @@
+Classificacao das arestas que saem do vertice 1:
+1 -> 10 Aresta de árvore
+1 -> 22 Aresta de avanço
+1 -> 2 Aresta de avanço
+1 -> 3 Aresta de avanço
+1 -> 94 Aresta de avanço
+1 -> 43 Aresta de avanço
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+Saindo do vertice 1 foram encontradas: 
+1 arestas de arvore
+0 arestas de retorno
+5 arestas de avanço
+0 arestas de cruzamento

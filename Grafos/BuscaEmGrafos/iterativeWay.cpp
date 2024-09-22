@@ -102,7 +102,7 @@ public:
                 if (pilha.size() % 10 == 0)
                 {
                     system("CLS");
-                    cout << pilha.size() << " eh o tamanho da pilha" << endl;
+                    cout << pilha.size() << " sao quantos vertices estao na pilha" << endl;
                 }
 
                 vertice_atual = pilha.top();
@@ -153,9 +153,11 @@ public:
         }
 
         system("CLS");
-        ofstream outputFile("tree_edges.txt");
+        int tree_counter = 0;
+        ofstream outputFile("tree_edges_iw.txt");
         if (outputFile)
         {
+
             outputFile << "Arestas de arvore: " << endl;
             for (int i = 1; i < pointer.size() - 1; i++)
             {
@@ -163,21 +165,27 @@ public:
                 {
                     if (edgeClassification[j] == TREE_EDGE)
                     {
+                        tree_counter++;
                         outputFile << i << " -> " << arc_dest[j] << endl;
                     }
                 }
             }
+            outputFile << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\nForam encontradas " << tree_counter << " arestas de arvore" << endl;
             outputFile.close();
-            cout << "Classificacao das arestas escrita no arquivo: tree_edges.txt" << endl;
+            cout << "Classificacao das arestas escrita no arquivo: tree_edges_iw.txt" << endl;
         }
         else
         {
-            cerr << "Error: nao foi possivel escrever no arquivo tree_edges.txt" << endl;
+            cerr << "Error: nao foi possivel escrever no arquivo tree_edges_iw.txt" << endl;
         }
 
-        ofstream outputFileX("vertex_edges_classification.txt");
+        ofstream outputFileX("vertex_edges_classification_iw.txt");
         if (outputFileX)
         {
+            tree_counter = 0;
+            int back_counter = 0;
+            int forward_counter = 0;
+            int cross_counter = 0;
             outputFileX << "Classificacao das arestas que saem do vertice " << Vx << ":" << endl;
             for (int i = pointer[Vx]; i < pointer[Vx + 1]; i++)
             {
@@ -185,25 +193,34 @@ public:
                 switch (edgeClassification[i])
                 {
                 case TREE_EDGE:
+                    tree_counter++;
                     outputFileX << " Aresta de árvore" << endl;
                     break;
                 case BACK_EDGE:
+                    back_counter++;
                     outputFileX << " Aresta de retorno" << endl;
                     break;
                 case FORWARD_EDGE:
+                    forward_counter++;
                     outputFileX << " Aresta de avanço" << endl;
                     break;
                 case CROSS_EDGE:
+                    cross_counter++;
                     outputFileX << " Aresta de cruzamento" << endl;
                     break;
                 }
             }
+            outputFileX << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\nSaindo do vertice " << Vx << " foram encontradas: \n"
+                        << tree_counter << " arestas de arvore\n"
+                        << back_counter << " arestas de retorno\n"
+                        << forward_counter << " arestas de avanço\n"
+                        << cross_counter << " arestas de cruzamento" << endl;
             outputFileX.close();
-            cout << "Classificacao das arestas que saem do vertice X escrita no arquivo: vertex_edges_classification.txt" << endl;
+            cout << "Classificacao das arestas que saem do vertice X escrita no arquivo: vertex_edges_classification_iw.txt" << endl;
         }
         else
         {
-            cerr << "Error: nao foi possivel escrever no arquivo vertex_edges_classification.txt" << endl;
+            cerr << "Error: nao foi possivel escrever no arquivo vertex_edges_classification_iw.txt" << endl;
         }
     }
 };
