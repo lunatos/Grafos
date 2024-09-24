@@ -21,6 +21,10 @@ class Graph
 private:
     vector<int> pointer;
     vector<int> arc_dest;
+    vector<int> TD;
+    vector<int> TT;
+    vector<EdgeClassification> edgeClassification;
+    int t;
 
 public:
     int getPointerSize()
@@ -78,11 +82,129 @@ public:
 
     void classifyEdges(int Vx)
     {
+        // pointer[0] == lixo, pointer[-1] == apontador fim
         // pointer.size() - 2 é o numero de vertices, pois não estamos utilizando a pos 0, então temos q alocar numero de vertices mais um
         // TD = tempo de descoberta, TT = tempo de termino
-        vector<int> TD(pointer.size() - 1, 0);
-        vector<int> TT(pointer.size() - 1, 0);
-        vector<EdgeClassification> edgeClassification(arc_dest.size(), NEW_EDGE);
+        TD.resize(pointer.size() - 1, 0);
+        TT.resize(pointer.size() - 1, 0);
+        edgeClassification.resize(arc_dest.size(), NEW_EDGE);
+        t = 0;
+
+        for (int i = 1; i < pointer.size() - 1; i++)
+        {
+            if (TD[i] == 0)
+            {
+                recursiveDFS(i);
+            }
+        }
+
+        system("CLS");
+        int tree_counter = 0;
+        ofstream outputFile("tree_edges_rw.txt");
+        if (outputFile)
+        {
+            outputFile << "Arestas de arvore: " << endl;
+            for (int i = 1; i < pointer.size(); i++)
+            {
+                for (int j = pointer[i]; j < pointer[i + 1]; j++)
+                {
+                    if (edgeClassification[j] == TREE_EDGE)
+                    {
+                        tree_counter++;
+                        outputFile << i << " -> " << arc_dest[j] << endl;
+                    }
+                }
+            }
+            outputFile << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\nForam encontradas " << tree_counter << " arestas de arvore" << endl;
+            outputFile.close();
+            cout << "Classificacao das arestas escrita no arquivo: tree_edges_rw.txt" << endl;
+        }
+        else
+        {
+            cerr << "Error: nao foi possivel escrever no arquivo tree_edges_rw.txt" << endl;
+        }
+
+        ofstream outputFileX("vertex_edges_classification_rw.txt");
+        if (outputFileX)
+        {
+            tree_counter = 0;
+            int back_counter = 0;
+            int forward_counter = 0;
+            int cross_counter = 0;
+            outputFileX << "Classificacao das arestas que saem do vertice " << Vx << ":" << endl;
+            for (int i = pointer[Vx]; i < pointer[Vx + 1]; i++)
+            {
+                outputFileX << Vx << " -> " << arc_dest[i];
+                switch (edgeClassification[i])
+                {
+                case TREE_EDGE:
+                    tree_counter++;
+                    outputFileX << " Aresta de árvore" << endl;
+                    break;
+                case BACK_EDGE:
+                    back_counter++;
+                    outputFileX << " Aresta de retorno" << endl;
+                    break;
+                case FORWARD_EDGE:
+                    forward_counter++;
+                    outputFileX << " Aresta de avanço" << endl;
+                    break;
+                case CROSS_EDGE:
+                    cross_counter++;
+                    outputFileX << " Aresta de cruzamento" << endl;
+                    break;
+                }
+            }
+            outputFileX << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\nSaindo do vertice " << Vx << " foram encontradas: \n"
+                        << tree_counter << " arestas de arvore\n"
+                        << back_counter << " arestas de retorno\n"
+                        << forward_counter << " arestas de avanço\n"
+                        << cross_counter << " arestas de cruzamento" << endl;
+            outputFileX.close();
+            cout << "Classificacao das arestas que saem do vertice X escrita no arquivo: vertex_edges_classification_rw.txt" << endl;
+        }
+        else
+        {
+            cerr << "Error: nao foi possivel escrever no arquivo vertex_edges_classification_rw.txt" << endl;
+        }
+    }
+
+    void recursiveDFS(int v)
+    {
+        t++;
+        TD[v] = t;
+        int w;
+
+        for (int i = pointer[v]; i < pointer[v + 1]; i++)
+        {
+            w = arc_dest[i];
+            if (edgeClassification[i] == NEW_EDGE)
+            {
+                if (TD[w] == 0)
+                {
+                    edgeClassification[i] = TREE_EDGE;
+                    recursiveDFS(w);
+                }
+                else
+                {
+                    if (TT[w] == 0)
+                    {
+                        edgeClassification[i] = BACK_EDGE;
+                    }
+                    else if (TD[v] < TD[w])
+                    {
+                        edgeClassification[i] = FORWARD_EDGE;
+                    }
+                    else
+                    {
+                        edgeClassification[i] = CROSS_EDGE;
+                    }
+                }
+            }
+        }
+
+        t++;
+        TT[v] = t;
     }
 };
 

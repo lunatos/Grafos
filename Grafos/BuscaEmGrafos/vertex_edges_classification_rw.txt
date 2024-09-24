@@ -1,0 +1,12 @@
+Classificacao das arestas que saem do vertice 50:
+50 -> 64 Aresta de árvore
+50 -> 94 Aresta de retorno
+50 -> 31 Aresta de retorno
+50 -> 88 Aresta de árvore
+50 -> 100 Aresta de árvore
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+Saindo do vertice 50 foram encontradas: 
+3 arestas de arvore
+2 arestas de retorno
+0 arestas de avanço
+0 arestas de cruzamento

@@ -157,7 +157,6 @@ public:
         ofstream outputFile("tree_edges_iw.txt");
         if (outputFile)
         {
-
             outputFile << "Arestas de arvore: " << endl;
             for (int i = 1; i < pointer.size() - 1; i++)
             {

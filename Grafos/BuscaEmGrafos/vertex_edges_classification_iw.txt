@@ -1,13 +1,24 @@
-Classificacao das arestas que saem do vertice 1:
-1 -> 10 Aresta de árvore
-1 -> 22 Aresta de avanço
-1 -> 2 Aresta de avanço
-1 -> 3 Aresta de avanço
-1 -> 94 Aresta de avanço
-1 -> 43 Aresta de avanço
+Classificacao das arestas que saem do vertice 150:
+150 -> 4582 Aresta de retorno
+150 -> 8249 Aresta de retorno
+150 -> 1360 Aresta de árvore
+150 -> 41579 Aresta de avanço
+150 -> 11045 Aresta de retorno
+150 -> 46633 Aresta de retorno
+150 -> 41070 Aresta de retorno
+150 -> 17946 Aresta de retorno
+150 -> 34682 Aresta de retorno
+150 -> 1048 Aresta de retorno
+150 -> 4987 Aresta de retorno
+150 -> 23380 Aresta de retorno
+150 -> 32109 Aresta de retorno
+150 -> 9189 Aresta de retorno
+150 -> 13774 Aresta de retorno
+150 -> 13084 Aresta de retorno
+150 -> 36176 Aresta de retorno
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-Saindo do vertice 1 foram encontradas: 
+Saindo do vertice 150 foram encontradas: 
 1 arestas de arvore
-0 arestas de retorno
-5 arestas de avanço
+15 arestas de retorno
+1 arestas de avanço
 0 arestas de cruzamento
