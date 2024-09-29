@@ -1,24 +1,32 @@
-Classificacao das arestas que saem do vertice 150:
-150 -> 4582 Aresta de retorno
-150 -> 8249 Aresta de retorno
-150 -> 1360 Aresta de árvore
-150 -> 41579 Aresta de avanço
-150 -> 11045 Aresta de retorno
-150 -> 46633 Aresta de retorno
-150 -> 41070 Aresta de retorno
-150 -> 17946 Aresta de retorno
-150 -> 34682 Aresta de retorno
-150 -> 1048 Aresta de retorno
-150 -> 4987 Aresta de retorno
-150 -> 23380 Aresta de retorno
-150 -> 32109 Aresta de retorno
-150 -> 9189 Aresta de retorno
-150 -> 13774 Aresta de retorno
-150 -> 13084 Aresta de retorno
-150 -> 36176 Aresta de retorno
+Classificacao das arestas que saem do vertice 5555:
+5555 -> 1262 Aresta de retorno
+5555 -> 3661 Aresta de arvore
+5555 -> 1262 Aresta de retorno
+5555 -> 3661 Aresta de avanço
+5555 -> 5379 Aresta de retorno
+5555 -> 5527 Aresta de avanço
+5555 -> 7532 Aresta de avanço
+5555 -> 8851 Aresta de avanço
+5555 -> 10303 Aresta de avanço
+5555 -> 12187 Aresta de retorno
+5555 -> 13760 Aresta de avanço
+5555 -> 14180 Aresta de avanço
+5555 -> 15814 Aresta de avanço
+5555 -> 17005 Aresta de avanço
+5555 -> 18627 Aresta de avanço
+5555 -> 19712 Aresta de avanço
+5555 -> 23520 Aresta de avanço
+5555 -> 26460 Aresta de avanço
+5555 -> 27014 Aresta de avanço
+5555 -> 28023 Aresta de avanço
+5555 -> 37196 Aresta de avanço
+5555 -> 38223 Aresta de avanço
+5555 -> 45223 Aresta de avanço
+5555 -> 45920 Aresta de avanço
+5555 -> 49698 Aresta de avanço
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-Saindo do vertice 150 foram encontradas: 
+Saindo do vertice 5555 foram encontradas: 
 1 arestas de arvore
-15 arestas de retorno
-1 arestas de avanço
+4 arestas de retorno
+20 arestas de avanço
 0 arestas de cruzamento

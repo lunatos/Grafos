@@ -4,18 +4,9 @@
 #include <stack>
 #include <chrono>
 #include <conio.h>
+#include <algorithm>
 
 using namespace std;
-
-enum EdgeClassification
-{
-    NEW_EDGE,
-    TREE_EDGE,
-    BACK_EDGE,
-    FORWARD_EDGE,
-    CROSS_EDGE
-};
-
 class Graph
 {
 private:
@@ -76,13 +67,33 @@ public:
         cout << "Leitura das arestas completa." << endl;
     }
 
+    vector<int> getAdjacentVertices(int Vx)
+    {
+        vector<int> adjacentVertices;
+        for (int i = pointer[Vx]; i < pointer[Vx + 1]; i++)
+        {
+            adjacentVertices.push_back(arc_dest[i]);
+        }
+        sort(adjacentVertices.begin(), adjacentVertices.end());
+        return adjacentVertices;
+    }
+
     void classifyEdges(int Vx)
     {
         // pointer.size() - 2 é o numero de vertices, pois não estamos utilizando a pos 0, então temos q alocar numero de vertices mais um
         // TD = tempo de descoberta, TT = tempo de termino
         vector<int> TD(pointer.size() - 1, 0);
         vector<int> TT(pointer.size() - 1, 0);
-        vector<EdgeClassification> edgeClassification(arc_dest.size(), NEW_EDGE);
+        vector<int> adjacentVertices;
+        vector<string> treeEdges;
+        vector<string> VxEdgesClassification;
+        int w;
+        string stringTmp;
+        int tree_counter = 0;
+        int back_counter = 0;
+        int forward_counter = 0;
+        int cross_counter = 0;
+        int Vx_tree_counter = 0;
 
         // Realiza DFS
         stack<int> pilha;
@@ -106,39 +117,52 @@ public:
                 }
 
                 vertice_atual = pilha.top();
+                adjacentVertices = getAdjacentVertices(vertice_atual);
 
                 // variavel para marcar caso ache alguma aresta de arvore para aprofundar mais a busca
                 bool achou = false;
                 // itera as arestas que saem do vertice atual
-                for (int j = pointer[vertice_atual]; j < pointer[vertice_atual + 1]; j++)
+                for (int j = 0; j < adjacentVertices.size(); j++)
                 {
-                    // se essa aresta nunca foi inspecionada
-                    if (edgeClassification[j] == NEW_EDGE)
+                    w = adjacentVertices[j];
+                    if (TD[w] == 0)
                     {
-                        // arc_dest[j] representa o vertice destino da aresta j
-                        if (TD[arc_dest[j]] == 0)
+                        stringTmp = to_string(vertice_atual) + " -> " + to_string(w) + " Aresta de arvore";
+                        treeEdges.push_back(stringTmp);
+                        achou = true;
+                        pilha.push(w);
+                        t++;
+                        TD[w] = t;
+                        if (vertice_atual == Vx)
                         {
-                            edgeClassification[j] = TREE_EDGE;
-                            achou = true;
-                            pilha.push(arc_dest[j]);
-                            t++;
-                            TD[arc_dest[j]] = t;
-                            break;
+                            VxEdgesClassification.push_back(stringTmp);
+                            Vx_tree_counter++;
                         }
-                        else
+                        tree_counter++;
+                        break;
+                    }
+                    else
+                    {
+                        // como é necessário produzir a classificação de todas as arestas apenas para o vértice informado
+                        if (vertice_atual == Vx)
                         {
-                            if (TT[arc_dest[j]] == 0)
+                            if (TT[w] == 0)
                             {
-                                edgeClassification[j] = BACK_EDGE;
+                                stringTmp = to_string(vertice_atual) + " -> " + to_string(w) + " Aresta de retorno";
+                                back_counter++;
                             }
-                            else if (TD[vertice_atual] < TD[arc_dest[j]])
+                            else if (TD[vertice_atual] < TD[w])
                             {
-                                edgeClassification[j] = FORWARD_EDGE;
+                                stringTmp = to_string(vertice_atual) + " -> " + to_string(w) + " Aresta de avanço";
+                                forward_counter++;
+
                             }
                             else
                             {
-                                edgeClassification[j] = CROSS_EDGE;
+                                stringTmp = to_string(vertice_atual) + " -> " + to_string(w) + " Aresta de cruzamento";
+                                cross_counter++;
                             }
+                            VxEdgesClassification.push_back(stringTmp);
                         }
                     }
                 }
@@ -153,21 +177,14 @@ public:
         }
 
         system("CLS");
-        int tree_counter = 0;
+
         ofstream outputFile("tree_edges_iw.txt");
         if (outputFile)
         {
             outputFile << "Arestas de arvore: " << endl;
-            for (int i = 1; i < pointer.size() - 1; i++)
+            for (const auto &str : treeEdges)
             {
-                for (int j = pointer[i]; j < pointer[i + 1]; j++)
-                {
-                    if (edgeClassification[j] == TREE_EDGE)
-                    {
-                        tree_counter++;
-                        outputFile << i << " -> " << arc_dest[j] << endl;
-                    }
-                }
+                outputFile << str << endl;
             }
             outputFile << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\nForam encontradas " << tree_counter << " arestas de arvore" << endl;
             outputFile.close();
@@ -181,36 +198,13 @@ public:
         ofstream outputFileX("vertex_edges_classification_iw.txt");
         if (outputFileX)
         {
-            tree_counter = 0;
-            int back_counter = 0;
-            int forward_counter = 0;
-            int cross_counter = 0;
             outputFileX << "Classificacao das arestas que saem do vertice " << Vx << ":" << endl;
-            for (int i = pointer[Vx]; i < pointer[Vx + 1]; i++)
+            for (const auto &str : VxEdgesClassification)
             {
-                outputFileX << Vx << " -> " << arc_dest[i];
-                switch (edgeClassification[i])
-                {
-                case TREE_EDGE:
-                    tree_counter++;
-                    outputFileX << " Aresta de árvore" << endl;
-                    break;
-                case BACK_EDGE:
-                    back_counter++;
-                    outputFileX << " Aresta de retorno" << endl;
-                    break;
-                case FORWARD_EDGE:
-                    forward_counter++;
-                    outputFileX << " Aresta de avanço" << endl;
-                    break;
-                case CROSS_EDGE:
-                    cross_counter++;
-                    outputFileX << " Aresta de cruzamento" << endl;
-                    break;
-                }
+                outputFileX << str << endl;
             }
             outputFileX << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\nSaindo do vertice " << Vx << " foram encontradas: \n"
-                        << tree_counter << " arestas de arvore\n"
+                        << Vx_tree_counter << " arestas de arvore\n"
                         << back_counter << " arestas de retorno\n"
                         << forward_counter << " arestas de avanço\n"
                         << cross_counter << " arestas de cruzamento" << endl;
