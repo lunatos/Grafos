@@ -6,6 +6,7 @@
 #include <string>
 #include <conio.h>
 #include <algorithm>
+#include <chrono>
 
 using namespace std;
 
@@ -40,6 +41,10 @@ public:
         cout << "Leitura das arestas completa." << endl;
     }
 
+    int getNumVert() {
+        return numVertices;
+    }
+
     bool bfs(int s, int t, vector<int> &parent) {
         vector<bool> visited(numVertices + 1, false);
         queue<int> q;
@@ -66,6 +71,7 @@ public:
     vector<vector<int>> findDisjointPaths(int source, int sink) {
         vector<vector<int>> allPaths;
         vector<int> parent(numVertices + 1);
+        auto start = chrono::high_resolution_clock::now();
 
         while (bfs(source, sink, parent)) {
             vector<int> path;
@@ -89,6 +95,16 @@ public:
             }
         }
 
+        auto stop = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+        auto seconds = duration.count() / 1000;
+        auto minutes = seconds / 60;
+        seconds %= 60;
+        auto milliseconds = duration.count() % 1000;
+
+        system ("CLS");
+        cout << "Algoritmo executado em: " << minutes << " minutos, " << seconds << " segundos e " << milliseconds << " milissegundos" << endl;
+
         return allPaths;
     }
 };
@@ -96,12 +112,8 @@ public:
 string selectFile()
 {
     string graphFiles[] = {
-        "graph-test-5x.txt",
         "graph-test-5.txt",
-        "graph-test-100.txt",
-        "graph-test-1000.txt",
-        "graph-test-10000.txt",
-        "graph-test-100000.txt",
+        "graph-esparso-7.txt"
     };
     int numGraphFiles = sizeof(graphFiles) / sizeof(graphFiles[0]);
     int currentChoice = 0;
@@ -137,16 +149,32 @@ string selectFile()
     }
 }
 
+int inputInRange(int min, int max) {
+    int value;
+    while (true) {
+        cout << "Digite um numero entre " << min << " e " << max << ": ";
+        cin >> value;
+
+        if (value >= min && value <= max) {
+            return value;
+        } else {
+            cout << "Valor fora do intervalo. Tente novamente." << endl;
+        }
+    }
+}
+
 int main() {
     string filename = selectFile();
     Graph test(filename);
 
-    int source = 1; // Defina seu vértice de origem
-    int target = 2; // Defina seu vértice de destino
+    cout << "Digite qual vertice sera a raiz e qual sera o sumidouro" << endl;
+
+    int source = inputInRange(1, test.getNumVert());
+    int target = inputInRange(1, test.getNumVert());
 
     vector<vector<int>> disjointPaths = test.findDisjointPaths(source, target);
 
-    cout << "Caminhos disjuntos encontrados:" << endl;
+    cout << "Foram encontrados " << disjointPaths.size() << " caminhos disjuntos:" << endl;
     for (const auto &path : disjointPaths) {
         for (int v : path) {
             cout << v << " ";
