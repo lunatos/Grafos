@@ -13,7 +13,7 @@ using namespace std;
 class Graph {
 private:
     vector<vector<int>> adjList;
-    vector<vector<int>> capacity; // Matriz de capacidade
+    vector<vector<int>> capacity;
     int numVertices;
     int numEdges;
 
@@ -34,7 +34,7 @@ public:
             int v1, v2;
             file >> v1 >> v2;
             adjList[v1].push_back(v2);
-            capacity[v1][v2]++; // Aumenta a capacidade da aresta
+            capacity[v1][v2]++;
         }
 
         file.close();
@@ -57,7 +57,7 @@ public:
             q.pop();
 
             for (int v : adjList[u]) {
-                if (!visited[v] && capacity[u][v] > 0) { // Se não foi visitado e a capacidade é positiva
+                if (!visited[v] && capacity[u][v] > 0) {
                     parent[v] = u;
                     visited[v] = true;
                     q.push(v);
@@ -65,7 +65,7 @@ public:
             }
         }
 
-        return visited[t]; // Retorna se o destino foi alcançado
+        return visited[t];
     }
 
     vector<vector<int>> findDisjointPaths(int source, int sink) {
@@ -77,21 +77,19 @@ public:
             vector<int> path;
             int v = sink;
 
-            // Reconstrói o caminho a partir do vértice destino até a origem
             while (v != source) {
                 path.push_back(v);
                 v = parent[v];
             }
             path.push_back(source);
-            reverse(path.begin(), path.end()); // Inverte para obter o caminho na ordem correta
+            reverse(path.begin(), path.end());
 
-            allPaths.push_back(path); // Armazena o caminho encontrado
+            allPaths.push_back(path);
 
-            // Remove a capacidade das arestas utilizadas no caminho
             for (size_t i = 0; i < path.size() - 1; i++) {
                 int u = path[i];
                 int v = path[i + 1];
-                capacity[u][v]--; // Remove a capacidade da aresta
+                capacity[u][v]--;
             }
         }
 
@@ -134,7 +132,7 @@ string selectFile()
             }
         }
 
-        int c = getch(); // o que foi digitado no console
+        int c = getch();
         switch (c)
         {
         case 0x48: // seta para cima
